@@ -1,0 +1,1 @@
+In Server Components : Important: Always use getUser() instead of getSession() in server code. The getUser() function validates the token with the Supabase Auth server, while getSession() only reads from cookies which could be spoofed
