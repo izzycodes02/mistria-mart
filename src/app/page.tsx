@@ -25,7 +25,7 @@ export default function Home() {
         </li>
         <li>
           <Link
-            href="/admin/login"
+            href="/login/admin"
             className="text-purple-600 hover:text-purple-400 hover:underline"
           >
             Admin Login Page
@@ -33,7 +33,7 @@ export default function Home() {
         </li>
         <li>
           <Link
-            href="/admin/dashboard"
+            href="/admin"
             className="text-green-600 hover:text-green-400 hover:underline"
           >
             Admin Dashboard Page

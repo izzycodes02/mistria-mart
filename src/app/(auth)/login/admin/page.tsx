@@ -4,11 +4,10 @@ import '@/styles/auth.scss';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
-import { createClient } from '../../../../utils/supabase/client';
-import TextInput from '@/inputs/TextInput';
 import { IconEye, IconEyeOff, IconLock, IconMail } from '@tabler/icons-react';
 import { LoaderCircle } from 'lucide-react';
 import Image from 'next/image';
+import { createClient } from 'utils/supabase/client';
 
 // Input Components
 function EmailInput({

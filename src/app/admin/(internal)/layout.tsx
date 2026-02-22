@@ -1,12 +1,14 @@
 import { Boxes, Carrot, ChefHat, Fish, Milk } from 'lucide-react';
 import Image from 'next/image';
 import {
+  IconHome2,
   IconLogout,
   IconUser,
   IconUserBolt,
   IconUsers,
 } from '@tabler/icons-react';
 import '@/styles/navigation.scss';
+import Link from 'next/link';
 
 // ============================================================================
 // CONSTANTS & CONFIG
@@ -25,7 +27,7 @@ const PROFILE_IMAGE_URL =
  * Logo section with app icon and title
  */
 const Logo = () => (
-  <div className="flex gap-2 items-center justify-center w-full mb-3">
+  <Link href="/" className="flex gap-2 items-center justify-center w-full mb-3">
     <Image
       src="/icons/mistriamart_x192.png"
       alt="icon"
@@ -34,7 +36,7 @@ const Logo = () => (
       className="mb-1"
     />
     <p className="text-xl font-bold text-mm-blue-mid">MistriaMart Admin</p>
-  </div>
+  </Link>
 );
 
 /**
@@ -62,25 +64,37 @@ const UserProfile = () => (
 
 /* App Datatables navigation items */
 const APP_DATATABLES_ITEMS = [
-  { icon: Carrot, label: 'Crops' },
-  { icon: Fish, label: 'Fish' },
-  { icon: Milk, label: 'Ingredients' },
-  { icon: ChefHat, label: 'Recipies' }, // Note: "Recipies" spelling preserved
+  { icon: Carrot, label: 'Crops', href: '/admin/crops' },
+  { icon: Fish, label: 'Fish', href: '/admin/fish' },
+  { icon: Milk, label: 'Ingredients', href: '/admin/ingredients' },
+  { icon: ChefHat, label: 'Recipes', href: '/admin/recipes' },
 ] as const;
 
 /*  Users navigation items */
 const USER_ITEMS = [
-  { icon: IconUser, label: 'All Users' },
-  { icon: IconUserBolt, label: 'Admins' },
+  { icon: IconUser, label: 'All Users', url: '/admin/users' },
+  { icon: IconUserBolt, label: 'Admins', url: '/admin/admins' },
 ] as const;
 
 // ============================================================================
 // NAVIGATION SECTION COMPONENTS
 // ============================================================================
 
+const DashboardHomeSection = () => (
+  <div className="mt-3">
+    {/* Section Header */}
+    <div className="flex flex-col">
+      <Link href="/admin/dashboard" className="leftSideBarItems">
+        <IconHome2 className="stroke-[1.5] w-4.5" />
+        <p className="font-medium">Main Dasboard</p>
+      </Link>
+    </div>
+  </div>
+);
+
 /* App Datatables section with all data-related navigation items */
 const AppDatatablesSection = () => (
-  <div className="mt-3">
+  <div className="mt-3 pl-2">
     {/* Section Header */}
     <div className="flex gap-1 text-zinc-500/60 mb-1 text-sm items-center">
       <Boxes className="stroke-[1.75] w-4" />
@@ -89,11 +103,11 @@ const AppDatatablesSection = () => (
 
     {/* Navigation Items */}
     <div className="flex flex-col">
-      {APP_DATATABLES_ITEMS.map(({ icon: Icon, label }) => (
-        <div key={label} className="leftSideBarItems">
+      {APP_DATATABLES_ITEMS.map(({ icon: Icon, label, href }) => (
+        <Link href={href} key={label} className="leftSideBarItems">
           <Icon className="stroke-[1.5] w-4.5" />
           <p className="font-medium">{label}</p>
-        </div>
+        </Link>
       ))}
     </div>
   </div>
@@ -101,7 +115,7 @@ const AppDatatablesSection = () => (
 
 /* Users section with user management navigation items */
 const UsersSection = () => (
-  <div className="mt-3">
+  <div className="mt-3 pl-2">
     {/* Section Header */}
     <div className="flex gap-1 text-zinc-500/60 mb-1 text-sm items-center">
       <IconUsers className="stroke-[2] w-4" />
@@ -110,11 +124,11 @@ const UsersSection = () => (
 
     {/* Navigation Items */}
     <div className="flex flex-col">
-      {USER_ITEMS.map(({ icon: Icon, label }) => (
-        <div key={label} className="leftSideBarItems">
+      {USER_ITEMS.map(({ icon: Icon, label, url }) => (
+        <Link href={url} key={label} className="leftSideBarItems">
           <Icon className="stroke-[1.5] w-4.5" />
           <p className="font-medium">{label}</p>
-        </div>
+        </Link>
       ))}
     </div>
   </div>
@@ -122,24 +136,31 @@ const UsersSection = () => (
 
 /* Logout button at the bottom of the sidebar */
 const LogoutButton = () => (
-  <div className="leftSideBarItems logOut justify-center">
-    <IconLogout className="stroke-[2] w-4.5" />
-    <p className="font-medium">Log out</p>
-  </div>
+  <Link href="/">
+    <div className="leftSideBarItems logOut justify-center">
+      <IconLogout className="stroke-[2] w-4.5" />
+      <p className="font-medium">Log out</p>
+    </div>
+  </Link>
 );
 
 // ============================================================================
-// MAIN COMPONENT
+// LAYOUT COMPONENT
 // ============================================================================
 
-export default function AdminDashboard() {
+interface AdminLayoutProps {
+  children: React.ReactNode;
+}
+
+export default function AdminLayout({ children }: AdminLayoutProps) {
   return (
     <div className="h-dvh w-full bg-mm-blue-lighter flex p-2">
-      {/* Left Side - Navigation */}
-      <nav className="h-full w-60 pl-3 py-3 pr-2 flex justify-between flex-col">
+      {/* Left Side - Navigation (Static across all admin pages) */}
+      <nav className="h-full w-60 pl-3 py-3 pr-2 flex gap-3 flex-col">
         <div>
           <Logo />
           <UserProfile />
+          <DashboardHomeSection />
           <AppDatatablesSection />
           <UsersSection />
         </div>
@@ -147,10 +168,10 @@ export default function AdminDashboard() {
         <LogoutButton />
       </nav>
 
-      {/* Right Side - Main Content */}
+      {/* Right Side - Dynamic Page Content */}
       <main className="grow h-full p-3">
         <div className="bg-white border border-zinc-200 h-full rounded-lg shadow-sm p-2">
-          <p>main content</p>
+          {children}
         </div>
       </main>
     </div>

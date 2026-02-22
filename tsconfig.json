@@ -22,7 +22,7 @@
     "paths": {
       "@/*": ["src/*"],
       "@/styles": ["src/styles/*"],
-      "@utils": ["./utils/*"],
+      "@/utils": ["./utils/*"],
       "@/icons/*": ["src/components/icons/*"],
       "@/common/*": ["src/components/ui/common/*"],
       "@/smallui/*": ["src/components/ui/smallUI/*"],
