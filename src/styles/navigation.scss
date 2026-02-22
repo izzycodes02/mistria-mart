@@ -1,85 +1,39 @@
-.myProfilePill {
-  box-shadow: 0 2px 2.5px -2px rgba(0, 0, 0, 0.15) !important;
-  
-}
+.leftSideBarItems {
+  @apply flex gap-2 py-1 px-2 rounded-md border border-mm-blue-lighter cursor-pointer text-zinc-600 items-center whitespace-nowrap transition-all duration-200;
 
-.userDropdown {
-  @apply flex flex-col gap-1;
 
-  button {
-    @apply flex w-full items-center gap-2 rounded-md py-1 pl-2 text-sm transition duration-300 hover:bg-zinc-75;
 
-    &.logOut {
-      @apply pl-[10px] hover:bg-red-50 hover:text-red-600 !important;
-    }
+  &:hover {
+    @apply shadow-sm border-zinc-300 bg-mm-blue-lightest text-inherit transition duration-300 ease-in-out;
 
     svg {
-      @apply w-4 stroke-[1.5];
+      @apply text-mm-pink-75;
     }
   }
 
-  &.tablet {
-    button {
-      @apply py-[6px] text-base;
-    }
-  }
-}
+  &.logOut {
+    @apply bg-mm-blue-mid shadow-sm border-mm-blue-dark text-mm-blue-lighter hover:bg-mm-blue-mid-dark transition duration-300 ease-in-out justify-center;
 
-.tabletNav {
-  @apply flex w-full items-center justify-between border-b border-border1 bg-white h-14 py-2 pl-3 pr-5 shadow-sm;
-
-  svg {
-    @apply stroke-[1.40];
-  }
-
-  .slideOutDrawer {
-    @apply fixed left-0 top-[56px] z-50 h-[calc(100%-56px)] w-52 transform bg-white p-4 shadow-lg transition-transform duration-300 ease-in-out;
-
-    &>div {
-      @apply flex flex-col gap-4;
-
-      a {
-        @apply flex items-center gap-3 rounded-md p-2 hover:bg-zinc-100/80 hover:text-slate-700;
-
-        &.home {
-          @apply pt-1;
-
-          p {
-            @apply mt-1;
-          }
-        }
-      }
-    }
-  }
-}
-
-.phoneNav {
-  @apply flex h-full w-full items-center justify-between border-t border-zinc-200 bg-white px-6 py-2 z-[10000];
-
-  a,
-  button {
-    @apply flex items-center gap-3 rounded-md p-2 hover:bg-zinc-100/80 hover:text-slate-700;
-  }
-
-  svg {
-    @apply stroke-[1.50] w-7 h-7;
-
-
-  }
-}
-
-.viewAllBtn {
-  @apply py-1 pt-1.5 px-3 text-white transition font-bold rounded-lg text-xs sm:text-sm;
-  background-color: var(--primary);
-  border: 1px solid var(--primary-border);
-  box-shadow: 0 2px 2px -2px rgba(0, 0, 0, 0.75);
-  text-shadow: 0 1px 0px rgba(0, 0, 0, 0.3);
-
-    @apply focus-visible:ring-2 focus-visible:ring-[var(--primary-border)] focus-visible:ring-offset-2 focus:outline-none;
-  
     &:hover {
-      background-color: var(--primary-darker);
-      border-color: var(--primary-border);
-      box-shadow: 0 2px 2px -2px rgba(0, 0, 0, 0.95);
+      svg {
+          @apply text-white; }
     }
+  }
+
+  // Tooltip for collapsed state
+  &[title] {
+    position: relative;
+
+    &:hover::after {
+      content: attr(title);
+      @apply absolute left-full ml-2 px-2 py-1 bg-zinc-800 text-white text-sm rounded-md whitespace-nowrap z-20;
+    }
+  }
+}
+
+// Smooth transitions for width changes
+nav {
+  transition-property: width;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
 }
