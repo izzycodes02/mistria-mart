@@ -84,7 +84,7 @@ const DashboardHomeSection = () => (
   <div className="mt-3">
     {/* Section Header */}
     <div className="flex flex-col">
-      <Link href="/admin/dashboard" className="leftSideBarItems">
+      <Link href="/admin" className="leftSideBarItems">
         <IconHome2 className="stroke-[1.5] w-4.5" />
         <p className="font-medium">Main Dasboard</p>
       </Link>
