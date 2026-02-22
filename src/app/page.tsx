@@ -39,6 +39,14 @@ export default function Home() {
             Admin Dashboard Page
           </Link>
         </li>
+        <li>
+          <Link
+            href="/admin/asu"
+            className="text-orange-600 hover:text-orange-400 hover:underline"
+          >
+            Admin Sign Up Page
+          </Link>
+        </li>
       </ul>
     </div>
   );

@@ -1,0 +1,113 @@
+/* ================================
+   AUTH SHARED STYLES
+   Used by both Login and Signup
+   ================================ */
+
+/* Input Fields */
+.authInput {
+  @apply w-full md:w-80 py-1.5 pl-9 pr-3 bg-white border border-gray-300 rounded-lg text-sm
+    placeholder:text-gray-400 placeholder:text-sm
+    hover:placeholder:text-gray-400
+    focus:ring-2 focus:ring-mm-blue-light focus:border-white outline-none
+    transition-colors duration-200 ease-in-out shadow-sm;
+}
+
+/* Password Input Spacing */
+.authInput.password {
+  @apply pr-10;
+}
+
+/* Error Styling */
+.authInput.error, .inputError{
+  @apply border-red-300 ring-2 ring-red-300;
+}
+
+/* Icons */
+.icon {
+  @apply absolute inset-y-0 flex items-center transition-colors;
+  @apply text-gray-400 peer-focus:text-mm-pink-75;
+
+  &.left {
+    @apply left-0 pl-3;
+  }
+
+  &.right {
+    @apply right-0 cursor-pointer pr-3 hover:text-mm-pink-100;
+  }
+
+  &.error {
+    @apply text-red-400 peer-focus:text-red-400 hover:text-red-400;
+  }
+}
+
+
+/* Input Wrapper (both) */
+.inputWrapper {
+  position: relative;
+
+  &:focus-within .icon {
+    @apply text-green-500;
+  }
+}
+
+/* Submit Buttons */
+.submitBtn {
+  @apply w-full sm:w-80 py-2
+    bg-mm-green-mid text-white border border-green-300/30 rounded-lg
+    hover:bg-mm-green-dark-mid focus:bg-mm-green-dark-mid outline-2
+    transition-colors duration-200 ease-in-out font-semibold shadow-sm;
+}
+
+/* Difference: Signup had extra mt-2 */
+.submitBtn.signup {
+  @apply mt-2; /* from Signup.scss */
+}
+
+/* Disabled Submit */
+.submitBtn:disabled {
+  @apply opacity-50 cursor-not-allowed hover:bg-green-500;
+}
+
+/* Social Login Buttons */
+.socialLogin button {
+  @apply flex h-12 flex-1 gap-2 font-medium items-center justify-center
+    rounded-lg border border-gray-300 bg-white text-green-500
+    transition-colors hover:bg-green-500/50 shadow-sm;
+}
+
+.socialLogin button:disabled {
+  @apply cursor-not-allowed opacity-50 hover:bg-white;
+}
+
+/* Helper Text (Signup only, used for hints/requirements) */
+.helperText {
+  @apply text-gray-400 text-sm;
+}
+
+// Validation Box
+.validationBox {
+  @apply mt-1 w-full rounded-lg border border-red-200 bg-red-50 p-2 px-3 text-sm text-red-600 sm:w-80;
+
+  &.normal {
+    @apply px-2.5 py-1.5 mt-2;
+  }
+
+  &.modal {
+    @apply sm:w-full;
+  }
+}
+
+// Invite Code section
+.inviteInput {
+  @apply w-full h-12 text-center border rounded-md text-lg font-bold text-gray-600 outline-2 outline-green-500;
+  @apply border-gray-300 focus:border-green-500 focus:ring-1 focus:ring-green-500;
+}
+
+.inviteInput.error {
+  @apply border-red-500 text-red-500;
+}
+
+// Beta Test Message 
+.betaTesterMessage {
+  @apply mt-1 w-full rounded-lg border border-green-500 bg-yellow-50/25 p-2 px-3 text-sm text-green-500 sm:w-80 flex gap-2 items-start;
+}
