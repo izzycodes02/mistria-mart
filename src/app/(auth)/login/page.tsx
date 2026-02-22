@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { createClient } from '../../../../utils/supabase/client';
+import TextInput  from "@/components/ui/smallUI/inputs/TextInput"
 
 export default function Login() {
   const router = useRouter();
