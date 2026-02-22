@@ -13,8 +13,11 @@ module.exports = {
       colors: {
         'bb-text': '#363223',
         'mm-blue': {
+          lightest: '#fbfeff ',
+          lighter: '#f5fbfe',
           light: '#8BDFF2',
           mid: '#5CAED8',
+          'mid-dark': '#339ace',
           dark: '#2F6583',
         },
         'mm-pink': {
@@ -25,7 +28,7 @@ module.exports = {
         },
         'mm-green': {
           mid: '#29CC8B',
-          'dark-mid': "#24b77d"
+          'dark-mid': '#24b77d',
         },
       },
       spacing: {
