@@ -1,3 +1,4 @@
+import QuickActions from '@/components/ui/smallUI/QuickActions';
 import StatCard from '@/components/ui/smallUI/StatCard';
 import '@/styles/admin.scss';
 import { IconBell, IconCalendar } from '@tabler/icons-react';
@@ -147,6 +148,16 @@ export default function DashboardPage() {
           <StatCard key={stat.title} {...stat} />
         ))}
       </div>
+
+      <hr className="border-slate-100 my-10" />
+
+      {/* Quick Actions */}
+      <h1 className="text-2xl font-bold text-slate-700 mb-4">Quick Actions</h1>
+      <div className="w-full">
+        <QuickActions />
+      </div>
+
+      <hr className="border-slate-100 my-10" />
     </div>
   );
 }
