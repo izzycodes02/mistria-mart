@@ -1,8 +1,8 @@
 'use client';
 
 import { Column, DataTable, DataTableRef, StatBlock } from '@/components/ui/common/Datatable';
-import { IconPlus } from '@tabler/icons-react';
-import { Pencil, Trash2 } from 'lucide-react';
+import { IconCheck, IconPlus, IconX } from '@tabler/icons-react';
+import { Eye, Pencil, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import { useRef } from 'react';
 
@@ -28,379 +28,309 @@ export default function CropsPage() {
   // Sample data matching database schema
   const cropsData: Crop[] = [
     {
-      id: 'crop_001',
-      name: 'Tomato',
-      image: '/images/crops/tomato.png',
-      season: ['Summer'],
-      source: 'General Store',
-      growthTime: 5,
-      regrowthTime: 0,
-      seedPrice: 20,
-      sellPrice: 35,
-      donateable: true,
-      museumSet: 'Crops',
-      forageLocation: null,
-      type: ['Vegetable', 'Fruit'],
-    },
-    {
-      id: 'crop_002',
-      name: 'Carrot',
-      image: '/images/crops/carrot.png',
+      id: 'turnip',
+      name: 'Turnip',
+      image: 'https://fieldsofmistria.wiki.gg/images/b/b7/Turnip.png?e82d93',
       season: ['Spring'],
       source: 'General Store',
       growthTime: 4,
       regrowthTime: 0,
-      seedPrice: 15,
-      sellPrice: 25,
+      seedPrice: 25,
+      sellPrice: 40,
       donateable: true,
-      museumSet: 'Crops',
+      museumSet: 'Spring Crop',
       forageLocation: null,
-      type: ['Vegetable'],
+      type: ['single'],
     },
     {
-      id: 'crop_003',
-      name: 'Pumpkin',
-      image: '/images/crops/pumpkin.png',
-      season: ['Fall'],
-      source: 'General Store',
-      growthTime: 7,
-      regrowthTime: 0,
-      seedPrice: 30,
-      sellPrice: 50,
-      donateable: true,
-      museumSet: 'Crops',
-      forageLocation: null,
-      type: ['Vegetable'],
-    },
-    {
-      id: 'crop_004',
+      id: 'potato',
       name: 'Potato',
-      image: '/images/crops/potato.png',
+      image: 'https://fieldsofmistria.wiki.gg/images/c/c2/Potato.png?e58bd2',
       season: ['Spring'],
       source: 'General Store',
       growthTime: 6,
       regrowthTime: 0,
-      seedPrice: 25,
-      sellPrice: 40,
-      donateable: true,
-      museumSet: 'Crops',
-      forageLocation: null,
-      type: ['Vegetable'],
-    },
-    {
-      id: 'crop_005',
-      name: 'Corn',
-      image: '/images/crops/corn.png',
-      season: ['Summer'],
-      source: 'General Store',
-      growthTime: 8,
-      regrowthTime: 0,
-      seedPrice: 25,
-      sellPrice: 45,
-      donateable: true,
-      museumSet: 'Crops',
-      forageLocation: null,
-      type: ['Vegetable', 'Grain'],
-    },
-    {
-      id: 'crop_006',
-      name: 'Strawberry',
-      image: '/images/crops/strawberry.png',
-      season: ['Spring'],
-      source: 'General Store',
-      growthTime: 4,
-      regrowthTime: 3,
       seedPrice: 40,
-      sellPrice: 60,
+      sellPrice: 75,
       donateable: true,
-      museumSet: 'Crops',
+      museumSet: 'Spring Crop',
       forageLocation: null,
-      type: ['Fruit'],
+      type: ['single'],
     },
     {
-      id: 'crop_007',
-      name: 'Cucumber',
-      image: '/images/crops/cucumber.png',
-      season: ['Summer'],
-      source: 'General Store',
-      growthTime: 5,
-      regrowthTime: 0,
-      seedPrice: 25,
-      sellPrice: 40,
-      donateable: true,
-      museumSet: 'Crops',
-      forageLocation: null,
-      type: ['Vegetable'],
-    },
-    {
-      id: 'crop_008',
-      name: 'Broccoli',
-      image: '/images/crops/broccoli.png',
-      season: ['Fall'],
-      source: 'General Store',
-      growthTime: 7,
-      regrowthTime: 0,
-      seedPrice: 35,
-      sellPrice: 55,
-      donateable: true,
-      museumSet: 'Crops',
-      forageLocation: null,
-      type: ['Vegetable'],
-    },
-    {
-      id: 'crop_009',
-      name: 'Lettuce',
-      image: '/images/crops/lettuce.png',
-      season: ['Spring'],
-      source: 'General Store',
-      growthTime: 3,
-      regrowthTime: 0,
-      seedPrice: 15,
-      sellPrice: 25,
-      donateable: true,
-      museumSet: 'Crops',
-      forageLocation: null,
-      type: ['Vegetable', 'Leafy'],
-    },
-    {
-      id: 'crop_010',
-      name: 'Bell Pepper',
-      image: '/images/crops/pepper.png',
-      season: ['Summer'],
-      source: 'General Store',
-      growthTime: 6,
-      regrowthTime: 3,
-      seedPrice: 30,
-      sellPrice: 45,
-      donateable: true,
-      museumSet: 'Crops',
-      forageLocation: null,
-      type: ['Vegetable'],
-    },
-    {
-      id: 'crop_011',
-      name: 'Cauliflower',
-      image: '/images/crops/cauliflower.png',
+      id: 'carrot',
+      name: 'Carrot',
+      image: 'https://fieldsofmistria.wiki.gg/images/c/c3/Carrot.png?63a338',
       season: ['Spring'],
       source: 'General Store',
       growthTime: 6,
       regrowthTime: 0,
-      seedPrice: 35,
-      sellPrice: 60,
-      donateable: true,
-      museumSet: 'Crops',
+      seedPrice: 40,
+      sellPrice: 80,
+      donateable: false,
+      museumSet: 'None',
       forageLocation: null,
-      type: ['Vegetable'],
+      type: ['single'],
     },
     {
-      id: 'crop_012',
-      name: 'Eggplant',
-      image: '/images/crops/eggplant.png',
-      season: ['Summer'],
+      id: 'cabbage',
+      name: 'Cabbage',
+      image: 'https://fieldsofmistria.wiki.gg/images/Cabbage.png?e2dbdf',
+      season: ['Spring'],
+      source: 'General Store',
+      growthTime: 9,
+      regrowthTime: 0,
+      seedPrice: 70,
+      sellPrice: 180,
+      donateable: true,
+      museumSet: 'Spring Crop',
+      forageLocation: null,
+      type: ['single'],
+    },
+    {
+      id: 'tulip',
+      name: 'Tulip',
+      image: 'https://fieldsofmistria.wiki.gg/images/c/cf/Tulip.png?134974',
+      season: ['Spring'],
       source: 'General Store',
       growthTime: 6,
-      regrowthTime: 3,
-      seedPrice: 30,
-      sellPrice: 50,
-      donateable: true,
-      museumSet: 'Crops',
-      forageLocation: null,
-      type: ['Vegetable'],
-    },
-    {
-      id: 'crop_013',
-      name: 'Peas',
-      image: '/images/crops/peas.png',
-      season: ['Spring'],
-      source: 'General Store',
-      growthTime: 4,
-      regrowthTime: 3,
-      seedPrice: 30,
-      sellPrice: 45,
-      donateable: true,
-      museumSet: 'Crops',
-      forageLocation: null,
-      type: ['Vegetable', 'Legume'],
-    },
-    {
-      id: 'crop_014',
-      name: 'Radish',
-      image: '/images/crops/radish.png',
-      season: ['Spring'],
-      source: 'General Store',
-      growthTime: 3,
       regrowthTime: 0,
       seedPrice: 20,
       sellPrice: 30,
       donateable: true,
-      museumSet: 'Crops',
+      museumSet: 'Spring Flower',
       forageLocation: null,
-      type: ['Vegetable', 'Root'],
+      type: ['single'],
     },
     {
-      id: 'crop_015',
-      name: 'Spinach',
-      image: '/images/crops/spinach.png',
-      season: ['Fall'],
-      source: 'General Store',
-      growthTime: 3,
-      regrowthTime: 0,
-      seedPrice: 20,
-      sellPrice: 35,
-      donateable: true,
-      museumSet: 'Crops',
-      forageLocation: null,
-      type: ['Vegetable', 'Leafy'],
-    },
-    {
-      id: 'crop_016',
-      name: 'Onion',
-      image: '/images/crops/onion.png',
+      id: 'strawberry',
+      name: 'Strawberry',
+      image:
+        'https://fieldsofmistria.wiki.gg/images/6/6d/Strawberry.png?936558',
       season: ['Spring'],
-      source: 'General Store',
-      growthTime: 7,
-      regrowthTime: 0,
-      seedPrice: 25,
-      sellPrice: 40,
-      donateable: true,
-      museumSet: 'Crops',
-      forageLocation: null,
-      type: ['Vegetable', 'Bulb'],
-    },
-    {
-      id: 'crop_017',
-      name: 'Garlic',
-      image: '/images/crops/garlic.png',
-      season: ['Spring'],
-      source: 'General Store',
-      growthTime: 8,
-      regrowthTime: 0,
-      seedPrice: 30,
-      sellPrice: 50,
-      donateable: true,
-      museumSet: 'Crops',
-      forageLocation: null,
-      type: ['Vegetable', 'Bulb'],
-    },
-    {
-      id: 'crop_018',
-      name: 'Watermelon',
-      image: '/images/crops/watermelon.png',
-      season: ['Summer'],
-      source: 'General Store',
-      growthTime: 10,
-      regrowthTime: 0,
-      seedPrice: 50,
-      sellPrice: 100,
-      donateable: true,
-      museumSet: 'Crops',
-      forageLocation: null,
-      type: ['Fruit'],
-    },
-    {
-      id: 'crop_019',
-      name: 'Zucchini',
-      image: '/images/crops/zucchini.png',
-      season: ['Summer'],
       source: 'General Store',
       growthTime: 5,
       regrowthTime: 3,
-      seedPrice: 25,
-      sellPrice: 40,
+      seedPrice: 300,
+      sellPrice: 125,
       donateable: true,
-      museumSet: 'Crops',
+      museumSet: 'Spring Crop',
       forageLocation: null,
-      type: ['Vegetable', 'Squash'],
+      type: ['multi'],
     },
     {
-      id: 'crop_020',
-      name: 'Kale',
-      image: '/images/crops/kale.png',
-      season: ['Fall'],
+      id: 'peas',
+      name: 'Peas',
+      image: 'https://fieldsofmistria.wiki.gg/images/e/e8/Peas.png?ae8607',
+      season: ['Spring'],
+      source: 'General Store',
+      growthTime: 5,
+      regrowthTime: 3,
+      seedPrice: 300,
+      sellPrice: 135,
+      donateable: false,
+      museumSet: 'None',
+      forageLocation: null,
+      type: ['multi'],
+    },
+    {
+      id: 'lilac',
+      name: 'Lilac',
+      image: 'https://fieldsofmistria.wiki.gg/images/5/5f/Lilac.png?ec8693',
+      season: ['Spring'],
+      source: 'Foraging',
+      growthTime: 9,
+      regrowthTime: 3,
+      seedPrice: 0,
+      sellPrice: 35,
+      donateable: true,
+      museumSet: 'Spring Flower',
+      forageLocation: null,
+      type: ['multi', 'foragable'],
+    },
+    {
+      id: 'cherry',
+      name: 'Cherry',
+      image: 'https://fieldsofmistria.wiki.gg/images/2/20/Cherry.png?d6e773',
+      season: ['Spring'],
+      source: 'General Store',
+      growthTime: 14,
+      regrowthTime: 3,
+      seedPrice: 400,
+      sellPrice: 45,
+      donateable: true,
+      museumSet: 'Spring Crop',
+      forageLocation: null,
+      type: ['tree'],
+    },
+    {
+      id: 'lemon',
+      name: 'Lemon',
+      image: 'https://fieldsofmistria.wiki.gg/images/3/35/Lemon.png?2a68b2',
+      season: ['Spring'],
+      source: 'General Store',
+      growthTime: 14,
+      regrowthTime: 3,
+      seedPrice: 400,
+      sellPrice: 45,
+      donateable: false,
+      museumSet: 'None',
+      forageLocation: null,
+      type: ['tree'],
+    },
+    {
+      id: 'cucumber',
+      name: 'Cucumber',
+      image: 'https://fieldsofmistria.wiki.gg/images/5/59/Cucumber.png?ac8b1c',
+      season: ['Summer'],
       source: 'General Store',
       growthTime: 4,
       regrowthTime: 0,
       seedPrice: 25,
       sellPrice: 40,
       donateable: true,
-      museumSet: 'Crops',
+      museumSet: 'Summer Crop',
       forageLocation: null,
-      type: ['Vegetable', 'Leafy'],
+      type: ['single'],
     },
     {
-      id: 'crop_021',
-      name: 'Beets',
-      image: '/images/crops/beets.png',
-      season: ['Spring'],
-      source: 'General Store',
-      growthTime: 5,
-      regrowthTime: 0,
-      seedPrice: 25,
-      sellPrice: 40,
-      donateable: true,
-      museumSet: 'Crops',
-      forageLocation: null,
-      type: ['Vegetable', 'Root'],
-    },
-    {
-      id: 'crop_022',
-      name: 'Celery',
-      image: '/images/crops/celery.png',
-      season: ['Fall'],
-      source: 'General Store',
-      growthTime: 7,
-      regrowthTime: 0,
-      seedPrice: 25,
-      sellPrice: 45,
-      donateable: true,
-      museumSet: 'Crops',
-      forageLocation: null,
-      type: ['Vegetable'],
-    },
-    {
-      id: 'crop_023',
-      name: 'Cabbage',
-      image: '/images/crops/cabbage.png',
-      season: ['Spring'],
+      id: 'chili-pepper',
+      name: 'Chili Pepper',
+      image:
+        'https://fieldsofmistria.wiki.gg/images/6/60/Chili_pepper.png?ebfc25',
+      season: ['Summer'],
       source: 'General Store',
       growthTime: 6,
       regrowthTime: 0,
-      seedPrice: 30,
-      sellPrice: 50,
+      seedPrice: 40,
+      sellPrice: 75,
       donateable: true,
-      museumSet: 'Crops',
+      museumSet: 'Summer Crop',
       forageLocation: null,
-      type: ['Vegetable', 'Leafy'],
+      type: ['single'],
     },
     {
-      id: 'crop_024',
-      name: 'Sweet Potato',
-      image: '/images/crops/sweet_potato.png',
+      id: 'sugar-cane',
+      name: 'Sugar Cane',
+      image:
+        'https://fieldsofmistria.wiki.gg/images/e/e8/Sugar_cane.png?6166d2',
+      season: ['Summer'],
+      source: 'General Store',
+      growthTime: 6,
+      regrowthTime: 0,
+      seedPrice: 40,
+      sellPrice: 80,
+      donateable: false,
+      museumSet: 'None',
+      forageLocation: null,
+      type: ['single'],
+    },
+    {
+      id: 'sunflower',
+      name: 'Sunflower',
+      image: 'https://fieldsofmistria.wiki.gg/images/8/81/Sunflower.png?533e2d',
+      season: ['Summer'],
+      source: 'General Store',
+      growthTime: 6,
+      regrowthTime: 0,
+      seedPrice: 20,
+      sellPrice: 30,
+      donateable: false,
+      museumSet: 'None',
+      forageLocation: null,
+      type: ['single'],
+    },
+    {
+      id: 'watermelon',
+      name: 'Watermelon',
+      image:
+        'https://fieldsofmistria.wiki.gg/images/0/06/Watermelon.png?467527',
       season: ['Summer'],
       source: 'General Store',
       growthTime: 9,
       regrowthTime: 0,
-      seedPrice: 35,
-      sellPrice: 60,
+      seedPrice: 70,
+      sellPrice: 180,
       donateable: true,
-      museumSet: 'Crops',
+      museumSet: 'Summer Crop',
       forageLocation: null,
-      type: ['Vegetable', 'Root'],
+      type: ['single'],
     },
     {
-      id: 'crop_025',
-      name: 'Green Bean',
-      image: '/images/crops/green_bean.png',
+      id: 'corn',
+      name: 'Corn',
+      image: 'https://fieldsofmistria.wiki.gg/images/f/f8/Corn.png?a10db5',
       season: ['Summer'],
       source: 'General Store',
       growthTime: 5,
       regrowthTime: 3,
-      seedPrice: 30,
-      sellPrice: 45,
+      seedPrice: 300,
+      sellPrice: 125,
       donateable: true,
-      museumSet: 'Crops',
+      museumSet: 'Summer Crop',
       forageLocation: null,
-      type: ['Vegetable', 'Legume'],
+      type: ['multi'],
+    },
+    {
+      id: 'tomato',
+      name: 'Tomato',
+      image: 'https://fieldsofmistria.wiki.gg/images/9/9d/Tomato.png?a3f9b3',
+      season: ['Summer'],
+      source: 'General Store',
+      growthTime: 5,
+      regrowthTime: 3,
+      seedPrice: 300,
+      sellPrice: 125,
+      donateable: true,
+      museumSet: 'Summer Crop',
+      forageLocation: null,
+      type: ['multi'],
+    },
+    {
+      id: 'tea',
+      name: 'Tea',
+      image: 'https://fieldsofmistria.wiki.gg/images/5/59/Tea.png?892509',
+      season: ['Summer'],
+      source: 'General Store',
+      growthTime: 5,
+      regrowthTime: 3,
+      seedPrice: 300,
+      sellPrice: 135,
+      donateable: false,
+      museumSet: 'None',
+      forageLocation: null,
+      type: ['multi'],
+    },
+    {
+      id: 'peach',
+      name: 'Peach',
+      image: 'https://fieldsofmistria.wiki.gg/images/e/e2/Peach.png?7a168e',
+      season: ['Summer'],
+      source: 'General Store',
+      growthTime: 14,
+      regrowthTime: 3,
+      seedPrice: 400,
+      sellPrice: 45,
+      donateable: false,
+      museumSet: 'None',
+      forageLocation: null,
+      type: ['tree'],
+    },
+    {
+      id: 'night-queen',
+      name: 'Night Queen',
+      image:
+        'https://fieldsofmistria.wiki.gg/images/2/2d/Night_queen.png?616cd3',
+      season: ['Summer'],
+      source: 'General Store',
+      growthTime: 6,
+      regrowthTime: 0,
+      seedPrice: 0,
+      sellPrice: 40,
+      donateable: false,
+      museumSet: 'None',
+      forageLocation: null,
+      type: ['single', 'foragable'],
     },
   ];
 
@@ -413,16 +343,16 @@ export default function CropsPage() {
           <Image
             src={row.image}
             alt={row.name}
-            className="w-8 h-8 object-cover rounded"
-            width={32}
-            height={32}
+            className="w-6 h-6 object-cover rounded"
+            width={22}
+            height={22}
           />
         ) : (
           <div className="w-8 h-8 bg-gray-200 rounded flex items-center justify-center text-xs text-gray-500">
             No img
           </div>
         ),
-      width: 80,
+      width: 60,
       align: 'center',
     },
     {
@@ -436,33 +366,56 @@ export default function CropsPage() {
       header: 'Season',
       accessor: (row: Crop) => row.season.join(', '),
       width: 100,
-      sortable: true,
     },
     {
       header: 'Seed Price',
-      accessor: (row: Crop) => (row.seedPrice ? `${row.seedPrice}g` : '-'),
+      accessor: (row: Crop) =>
+        row.seedPrice ? (
+          <div className="flex items-end">
+            <span>{row.seedPrice}g</span>
+            <Image
+              src="/smallIcons/coin2.webp"
+              alt={row.name}
+              className="w-4 h-4 mb-[2px] ml-1"
+              width={20}
+              height={20}
+            />
+          </div>
+        ) : (
+          <span className="text-gray-400">n/a</span>
+        ),
       width: 100,
-      sortable: true,
     },
     {
       header: 'Sell Price',
-      accessor: (row: Crop) => (row.sellPrice ? `${row.sellPrice}g` : '-'),
+      // accessor: (row: Crop) => (row.sellPrice ? `${row.sellPrice}g` : '-'),
+      accessor: (row: Crop) =>
+        row.sellPrice ? (
+          <div className="flex items-end">
+            <span>{row.sellPrice}g</span>
+            <Image
+              src="/smallIcons/coin2.webp"
+              alt={row.name}
+              className="w-4 h-4 mb-[2px] ml-1"
+              width={20}
+              height={20}
+            />
+          </div>
+        ) : (
+          <span className="text-gray-400">n/a</span>
+        ),
       width: 100,
-      sortable: true,
     },
     {
       header: 'Growth',
       accessor: (row: Crop) => (row.growthTime ? `${row.growthTime}d` : '-'),
       width: 80,
-      sortable: true,
-      align: 'center',
     },
     {
       header: 'Regrowth',
       accessor: (row: Crop) =>
         row.regrowthTime ? `${row.regrowthTime}d` : 'No',
       width: 80,
-      sortable: true,
       align: 'center',
     },
     {
@@ -473,44 +426,41 @@ export default function CropsPage() {
     {
       header: 'Donatable',
       accessor: (row: Crop) => (
-        <span className={row.donateable ? 'text-green-600' : 'text-gray-400'}>
-          {row.donateable ? '✓' : '✗'}
+        <span className={row.donateable ? 'text-green-600' : 'text-red-400'}>
+          {row.donateable ? (
+            <IconCheck className="w-6 h-6 rounded-md bg-green-100 p-1" />
+          ) : (
+            <IconX className="w-6 h-6 rounded-md bg-red-100 p-1" />
+          )}
         </span>
       ),
-      width: 80,
-      align: 'center',
+      width: 60,
     },
   ];
 
   // Stats blocks
   const stats: StatBlock[] = [
     { title: 'Total Crops', value: cropsData.length },
-    {
-      title: 'Avg Seed Price',
-      value: `${Math.round(cropsData.reduce((acc, c) => acc + (c.seedPrice || 0), 0) / cropsData.length)}g`,
-    },
-    {
-      title: 'Avg Sell Price',
-      value: `${Math.round(cropsData.reduce((acc, c) => acc + (c.sellPrice || 0), 0) / cropsData.length)}g`,
-    },
-    {
-      title: 'Regrowable',
-      value: cropsData.filter((c) => (c.regrowthTime || 0) > 0).length,
-    },
   ];
 
   // Actions for each row
   const renderActions = (row: Crop) => (
-    <div className="flex gap-2">
+    <div className="flex gap-2 p-1">
       <button
         onClick={() => console.log('Edit', row.id)}
-        className="p-1 text-blue-600 hover:bg-blue-50 rounded"
+        className="p-1 text-mm-blue-mid hover:bg-blue-50 rounded"
       >
         <Pencil className="w-4 h-4" />
       </button>
       <button
+        onClick={() => console.log('View', row.id)}
+        className="p-1 text-mm-orange-dark hover:bg-mm-orange-dark/10 rounded"
+      >
+        <Eye className="w-4 h-4" />
+      </button>
+      <button
         onClick={() => console.log('Delete', row.id)}
-        className="p-1 text-red-600 hover:bg-red-50 rounded"
+        className="p-1 text-mm-pink-75 hover:bg-red-50 rounded"
       >
         <Trash2 className="w-4 h-4" />
       </button>
@@ -533,7 +483,7 @@ export default function CropsPage() {
         </div>
 
         {/* Description */}
-        <p className="text-neutral-500 mt-3">
+        <p className="text-neutral-500 mt-3 mb-5">
           Table containing all crop and forageable item data including planting
           seasons, growth times, pricing, and sourcing information from Fields
           of Mistria.
@@ -545,7 +495,7 @@ export default function CropsPage() {
         data={cropsData}
         columns={columns}
         wFull
-        sortable={true}
+        sortable={false}
         actions={renderActions}
         selectable={false}
         stats={stats}
