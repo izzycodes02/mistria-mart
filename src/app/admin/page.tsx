@@ -1,9 +1,10 @@
 export default function DashboardPage() {
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
-      <p>Welcome to the admin dashboard!</p>
-      {/* Your dashboard content here */}
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold">Welcome back, Sarah!</h1>
+        <div className="text-gray-600">{new Date().toLocaleDateString()}</div>
+      </div>
     </div>
   );
 }
