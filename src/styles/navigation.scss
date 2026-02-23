@@ -37,3 +37,10 @@ nav {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 300ms;
 }
+
+.NavSearchBar:hover {
+  svg {
+    @apply text-mm-orange-dark-mid transition-all duration-300 ease-in-out;
+  }
+}
+

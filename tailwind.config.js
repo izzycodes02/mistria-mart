@@ -30,6 +30,10 @@ module.exports = {
           mid: '#29CC8B',
           'dark-mid': '#24b77d',
         },
+        'mm-orange': {
+          mid: '#FFD49D',
+          'dark-mid': '#ffb251',
+        },
       },
       spacing: {
         18: '4.5rem',

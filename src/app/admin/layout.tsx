@@ -13,6 +13,7 @@ import Image from 'next/image';
 import {
   IconHome2,
   IconLogout,
+  IconSearch,
   IconUser,
   IconUserBolt,
   IconUsers,
@@ -111,7 +112,7 @@ const DashboardHomeSection = ({ isCollapsed }: { isCollapsed: boolean }) => (
   <div className="mt-3">
     <Link
       href="/admin"
-      title={isCollapsed ? "Dashboard" : undefined}
+      title={isCollapsed ? 'Dashboard' : undefined}
       className={clsx('leftSideBarItems', isCollapsed && 'justify-center px-2')}
     >
       <IconHome2
@@ -138,7 +139,7 @@ const GameDataSection = ({ isCollapsed }: { isCollapsed: boolean }) => (
     </div>
 
     {/* Navigation Items */}
-    <div className={`flex flex-col  ${isCollapsed ? 'gap-2' : 'gap-0.5'}`}>
+    <div className={`flex flex-col  ${isCollapsed ? 'gap-4' : 'gap-0.5'}`}>
       {GAME_DATA_ITEMS.map(({ icon: Icon, label, href }) => (
         <Link
           href={href}
@@ -175,7 +176,7 @@ const UsersSection = ({ isCollapsed }: { isCollapsed: boolean }) => (
     </div>
 
     {/* Navigation Items */}
-    <div className="flex flex-col gap-0.5">
+    <div className={`flex flex-col ${isCollapsed ? 'gap-4' : 'gap-0.5'}`}>
       {USER_ITEMS.map(({ icon: Icon, label, url }) => (
         <Link
           href={url}
@@ -211,6 +212,61 @@ const LogoutButton = ({ isCollapsed }: { isCollapsed: boolean }) => (
   </Link>
 );
 
+const ToggleNavButton = ({
+  isCollapsed,
+  setIsCollapsed,
+}: {
+  isCollapsed: boolean;
+  setIsCollapsed: (value: boolean) => void;
+}) => (
+  <button
+    onClick={() => setIsCollapsed(!isCollapsed)}
+    className="absolute -right-7 top-8 z-10 bg-white border border-zinc-300 rounded-full p-1 shadow-md hover:bg-mm-blue-lightest transition-all duration-300"
+  >
+    {isCollapsed ? (
+      <ChevronRight className="w-4 h-4" />
+    ) : (
+      <ChevronLeft className="w-4 h-4" />
+    )}
+  </button>
+);
+
+const SearchBar = ({
+  isCollapsed,
+  searchValue,
+  setSearchValue,
+  setIsCollapsed,
+}: {
+  isCollapsed: boolean;
+  searchValue: string;
+  setSearchValue: (value: string) => void;
+  setIsCollapsed: (value: boolean) => void;
+}) => (
+  <div className={`w-full relative ${isCollapsed ? 'NavSearchBar' : ''}`}>
+    <input
+      type="text"
+      placeholder={isCollapsed ? '' : 'Search...'}
+      value={isCollapsed ? '' : searchValue}
+      readOnly={isCollapsed}
+      onChange={(e) => setSearchValue(e.target.value)}
+      className={`w-full relative rounded-md border border-zinc-300 bg-white/60 focus:bg-white focus:shadow-sm mt-3 transition-all outline-none placeholder:text-slate-400 duration-300 text-sm ${isCollapsed ? 'p-3 py-1.5 cursor-pointer hover:bg-white hover:shadow-sm' : 'pr-3 pl-7 py-1.5'}`}
+      onClick={() => {
+        if (isCollapsed) {
+          setIsCollapsed(false);
+        }
+      }}
+    />
+    <IconSearch
+      className={`absolute ${isCollapsed ? 'left-5.5 top-4.5 w-5 h-5 cursor-pointer' : 'left-2 top-5.5 w-3.5 h-3.5 text-slate-400'}`}
+      onClick={() => {
+        if (isCollapsed) {
+          setIsCollapsed(false);
+        }
+      }}
+    />
+  </div>
+);
+
 // ============================================================================
 // LAYOUT COMPONENT
 // ============================================================================
@@ -221,6 +277,7 @@ interface AdminLayoutProps {
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
 
   return (
     <div className="h-dvh w-full bg-mm-blue-lighter flex p-2">
@@ -231,17 +288,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           isCollapsed ? 'w-20' : 'w-60',
         )}
       >
-        {/* Toggle Button */}
-        <button
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          className="absolute -right-7 top-8 z-10 bg-white border border-zinc-300 rounded-full p-1 shadow-md hover:bg-mm-blue-lightest transition-all duration-300"
-        >
-          {isCollapsed ? (
-            <ChevronRight className="w-4 h-4" />
-          ) : (
-            <ChevronLeft className="w-4 h-4" />
-          )}
-        </button>
+        <ToggleNavButton
+          isCollapsed={isCollapsed}
+          setIsCollapsed={setIsCollapsed}
+        />
 
         <div
           className={clsx(
@@ -252,6 +302,12 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           <div>
             <Logo isCollapsed={isCollapsed} />
             <UserProfile isCollapsed={isCollapsed} />
+            <SearchBar
+              isCollapsed={isCollapsed}
+              setIsCollapsed={setIsCollapsed} 
+              searchValue={searchValue}
+              setSearchValue={setSearchValue}
+            />
             <DashboardHomeSection isCollapsed={isCollapsed} />
             <GameDataSection isCollapsed={isCollapsed} />
             <UsersSection isCollapsed={isCollapsed} />
@@ -265,7 +321,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
       {/* Right Side - Dynamic Page Content */}
       <main className="grow h-full p-3">
-        <div className="bg-white border border-zinc-200 h-full rounded-lg shadow-sm pb-2 px-8 pt-4 overflow-auto">
+        <div className="bg-white border border-zinc-200 h-full rounded-lg shadow-sm pb-2 px-8 pt-5 overflow-auto">
           {children}
         </div>
       </main>

@@ -1,0 +1,20 @@
+.Dashboard {
+    .miniStats {
+        @apply mt-2 h-fit flex space-x-4;
+
+        p {
+            @apply text-gray-500 border border-gray-300 rounded-md px-3 py-1 text-xs;
+        }
+    }
+
+    .notifyBell {
+        @apply relative p-2;
+
+        &:hover {
+            @apply shadow-sm bg-slate-50 rounded-md;
+            svg {
+                @apply text-mm-pink-100;
+            }
+        }
+    }
+}
