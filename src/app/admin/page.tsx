@@ -114,7 +114,7 @@ export default function DashboardPage() {
 
         {/* Right Hand Side */}
         <div className="flex gap-1">
-          <button className="relative p-2  hover:shadow-sm hover:bg-mm-blue-lighter border border-white hover:border-slate-100 rounded-md ">
+          <button className="notifyBell">
             <span className="text-xl">
               <IconBell className="stroke-[1.5]" />
             </span>
