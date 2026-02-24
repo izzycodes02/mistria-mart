@@ -18,7 +18,7 @@ import {
   ChevronDown,
 } from 'lucide-react';
 import clsx from 'clsx';
-import { IconDotsVertical } from '@tabler/icons-react';
+import { IconDotsVertical, IconFilter } from '@tabler/icons-react';
 
 // ============================================================================
 // TYPES
@@ -51,6 +51,7 @@ export interface DataTableProps<T> {
   sortable?: boolean; // Global sortable default
   actions?: (row: T) => ReactNode; // Actions column content
   selectable?: boolean; // Enable row selection
+  selectableBgColor?: string; // Background color for selected rows
   clickable?: {
     href: string | ((row: T) => string);
     target?: '_blank' | '_self';
@@ -80,10 +81,10 @@ export interface DataTableRef<T> {
 // ============================================================================
 
 const TableStats = ({ stats }: { stats: StatBlock[] }) => (
-  <div className="flex gap-4 mb-2 flex-wrap">
+  <div className="flex gap-4 flex-wrap">
     {stats.map((stat, index) => (
-      <div key={index} className={clsx(' flex gap-1', stat.color)}>
-        <p className=" text-sm text-gray-500 uppercase">{stat.title}:</p>
+      <div key={index} className={clsx(' flex gap-1', stat.color, 'bg-white px-3 py-2 rounded-lg border shadow-sm')}>
+        <p className=" text-sm text-neutral-500 uppercase">{stat.title}:</p>
         <p className="text-sm font-semibold text-gray-900">{stat.value}</p>
       </div>
     ))}
@@ -112,6 +113,7 @@ function DataTableInner<T extends Record<string, unknown>>(
     sortable: globalSortable = false,
     actions,
     selectable = false,
+    selectableBgColor,
     clickable,
     stats = [],
     showStats = false,
@@ -315,9 +317,32 @@ function DataTableInner<T extends Record<string, unknown>>(
       {/* Stats Section */}
 
       <div className="w-full bg-neutral-100 p-4 rounded-2xl">
-        {/* Table Container with Horizontal Scroll */}
-        <div>
-          {showStats && stats.length > 0 && <TableStats stats={stats} />}
+        {/* Table Container*/}
+        <div className="flex justify-between items-center mb-4 ">
+          <div className="flex space-x-3">
+            {showStats && stats.length > 0 && <TableStats stats={stats} />}
+
+            {/* Add the total selected  */}
+            {selectable && (
+              <div className="text-sm flex items-center gap-1 bg-white px-3 py-2 rounded-lg border shadow-sm">
+                <p className=" text-sm text-neutral-500 uppercase">
+                  Total Selected:
+                </p>
+                <p className="text-sm font-semibold text-gray-900">
+                  {selectedRows.size}
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Show the Filters button */}
+          <button
+            type="button"
+            className="text-sm flex items-center gap-1 bg-mm-orange-mid border-mm-orange-dark-mid hover:bg-mm-orange-dark-mid transition duration-200 ease-in-out px-3 py-2 rounded-lg border shadow-sm active:scale-[.97] font-semibold "
+          >
+            <IconFilter className="w-4 h-4 " />
+            <span>Filters</span>
+          </button>
         </div>
         <div
           ref={tableContainerRef}
@@ -327,17 +352,17 @@ function DataTableInner<T extends Record<string, unknown>>(
             className={clsx('divide-y divide-zinc-200', wFull && 'w-full')}
           >
             {/* Table Header */}
-            <thead className="bg-neutral-800">
+            <thead className="bg-neutral-800 pl-20">
               <tr>
                 {/* Select All Column */}
                 {selectable && (
-                  <th className="px-3 py-3 w-10 sticky left-0 bg-gray-50 z-10">
+                  <th className="p-3 pl-3.5 w-5 sticky left-0 bg-neutral-800 z-10">
                     <input
                       ref={selectAllRef}
                       type="checkbox"
                       checked={isAllSelected}
                       onChange={handleSelectAll}
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      className="rounded border-neutral-500 text-neutral-600 focus:ring-neutral-500"
                     />
                   </th>
                 )}
@@ -355,7 +380,8 @@ function DataTableInner<T extends Record<string, unknown>>(
                         width: column.width ? `${column.width}px` : 'auto',
                       }}
                       className={clsx(
-                        'pl-3 py-2 text-sm text-mm-blue-lightest font-bold w-fit',
+                        index === 0 ? 'pl-5' : 'pl-3',
+                        'py-2 text-sm text-mm-blue-lightest font-bold w-fit',
                         (column.sortable || globalSortable) &&
                           'cursor-pointer  group',
                         column.align === 'left' && 'text-left',
@@ -379,7 +405,7 @@ function DataTableInner<T extends Record<string, unknown>>(
 
                 {/* Actions Column */}
                 {actions && (
-                  <th className="px-3 py-3 w-8 sticky right-0 bg-neutral-800 z-10">
+                  <th className="px-1 py-3 w-8 sticky right-0 bg-neutral-800 z-10">
                     <span className="sr-only text-xs">Actions</span>
                   </th>
                 )}
@@ -417,13 +443,14 @@ function DataTableInner<T extends Record<string, unknown>>(
                     onClick={handleRowClick}
                     className={clsx(
                       'transition-colors duration-150',
-                      isSelected && 'bg-blue-50',
-                      rowIsClickable && 'cursor-pointer hover:bg-gray-50',
+                      isSelected && (selectableBgColor || 'bg-blue-50'),
+                      rowIsClickable &&
+                        'cursor-pointer hover:underline text-blue-400',
                     )}
                   >
                     {/* Select Row Checkbox */}
                     {selectable && (
-                      <td className="px-3 py-3 sticky left-0 bg-inherit z-10">
+                      <td className="pl-5 pr-1 py-3 sticky left-0 bg-inherit z-10">
                         <input
                           type="checkbox"
                           checked={isSelected}
@@ -439,7 +466,8 @@ function DataTableInner<T extends Record<string, unknown>>(
                       <td
                         key={colIndex}
                         className={clsx(
-                          'px-3 py-3 text-sm text-gray-900',
+                          colIndex === 0 ? 'pl-5' : 'pl-3',
+                          'pr-3 py-3 text-sm text-gray-900',
                           column.align === 'left' && 'text-left',
                           column.align === 'center' && 'text-center',
                           column.align === 'right' && 'text-right',
@@ -452,7 +480,7 @@ function DataTableInner<T extends Record<string, unknown>>(
 
                     {/* Actions Cell */}
                     {actions && (
-                      <td className="px-3 py-3 sticky right-0 bg-inherit z-20">
+                      <td className="px-1 py-3 sticky right-0 bg-inherit z-20 flex justify-center">
                         <div
                           className={`relative border border-neutral-200 hover:shadow-sm w-6 h-6 flex items-center justify-center rounded cursor-pointer  ${openActionsRowId === rowIndex ? 'bg-neutral-200' : 'bg-white'}`}
                           onClick={(e) => {

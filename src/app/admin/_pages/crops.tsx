@@ -1,10 +1,22 @@
 'use client';
 
 import { Column, DataTable, DataTableRef, StatBlock } from '@/components/ui/common/Datatable';
-import { IconCheck, IconPlus, IconX } from '@tabler/icons-react';
+import {
+  IconCheck,
+  IconPlus,
+  IconX,
+  IconUser,
+  IconCalendar,
+  IconSearch
+} from '@tabler/icons-react'
 import { Eye, Pencil, Trash2 } from 'lucide-react';
 import Image from 'next/image';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
+import '@/styles/admin.scss';
+import {
+  DataTableFilters,
+  FilterConfig,
+} from '@/components/ui/common/DatatableFilters';
 
 interface Crop {
   id: string;
@@ -408,15 +420,14 @@ export default function CropsPage() {
     },
     {
       header: 'Growth',
-      accessor: (row: Crop) => (row.growthTime ? `${row.growthTime}d` : '-'),
+      accessor: (row: Crop) => (row.growthTime ? `${row.growthTime} days` : '-'),
       width: 80,
     },
     {
       header: 'Regrowth',
       accessor: (row: Crop) =>
-        row.regrowthTime ? `${row.regrowthTime}d` : 'No',
+        row.regrowthTime ? `${row.regrowthTime} days` : <span className="text-gray-400">No</span>,
       width: 80,
-      align: 'center',
     },
     {
       header: 'Type',
@@ -467,6 +478,84 @@ export default function CropsPage() {
     </div>
   );
 
+  // Filters
+  const [filters, setFilters] = useState({
+    name: '',
+    season: '',
+    donatableFilter: '',
+    typeFilter: '',
+  });
+
+  const filterConfigs: FilterConfig[] = [
+    {
+      id: 'nameFilter',
+      label: 'Name',
+      type: 'text',
+      placeholder: 'Search by crop name',
+      className: 'focus:ring-mm-orange-dark',
+      value: filters.name,
+      onChange: (value) =>
+        setFilters((prev) => ({
+          ...prev,
+          name: String(value ?? ''),
+        })),
+      icon: <IconSearch size={16} />,
+    },
+    {
+      id: 'seasonFilter',
+      label: 'Season',
+      type: 'dropdown',
+      className: 'focus:ring-mm-orange-dark',
+      value: filters.season,
+      onChange: (value) =>
+        setFilters((prev) => ({
+          ...prev,
+          season: String(value ?? ''),
+        })),
+      options: [
+        { value: 'all', label: 'All Seasons' },
+        { value: 'spring', label: 'Spring' },
+        { value: 'summer', label: 'Summer' },
+        { value: 'fall', label: 'Fall' },
+        { value: 'winter', label: 'Winter' },
+      ],
+    },
+    {
+      id: 'donatableFilter',
+      label: 'Donatable',
+      type: 'dropdown',
+      className: 'focus:ring-mm-orange-dark',
+      value: filters.donatableFilter,
+      onChange: (value) =>
+        setFilters((prev) => ({
+          ...prev,
+          donatableFilter: String(value ?? ''),
+        })),
+      options: [
+        { value: 'true', label: 'Yes' },
+        { value: 'false', label: 'No' },
+      ],
+    },
+    {
+      id: 'typeFilter',
+      label: 'Type',
+      type: 'dropdown',
+      className: 'focus:ring-mm-orange-dark',
+      value: filters.typeFilter,
+      onChange: (value) =>
+        setFilters((prev) => ({
+          ...prev,
+          typeFilter: String(value ?? ''),
+        })),
+      options: [
+        { value: 'all', label: 'All Types' },
+        { value: 'single', label: 'Single' },
+        { value: 'multi', label: 'Multi' },
+        { value: 'forageable', label: 'Forageable' },
+      ],
+    },
+  ];
+
   return (
     <div className="CropsPage w-full">
       <div className="flex flex-col gap-2 w-full">
@@ -490,6 +579,10 @@ export default function CropsPage() {
         </p>
       </div>
 
+      <hr className="border-slate-300 my-5" />
+
+      <DataTableFilters filters={filterConfigs} columns={4} />
+
       <DataTable
         ref={tableRef}
         data={cropsData}
@@ -497,11 +590,12 @@ export default function CropsPage() {
         wFull
         sortable={false}
         actions={renderActions}
-        selectable={false}
+        selectable={true}
+        selectableBgColor="bg-orange-50"
         stats={stats}
         showStats={true}
         itemsPerPage={10}
-        itemsPerPageOptions={[5, 10, 25, 50]}
+        itemsPerPageOptions={[5, 10, 15, 20, 25, 50]}
         clickable={{
           href: (row) => `/admin/crops/${row.id}`,
           target: '_self',
