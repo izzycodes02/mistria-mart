@@ -36,9 +36,6 @@ const PROFILE_IMAGE_URL =
 // HELPER COMPONENTS
 // ============================================================================
 
-/**
- * Logo section with app icon and title
- */
 const Logo = ({ isCollapsed }: { isCollapsed: boolean }) => (
   <Link
     href="/"
@@ -60,9 +57,6 @@ const Logo = ({ isCollapsed }: { isCollapsed: boolean }) => (
   </Link>
 );
 
-/**
- * User profile card showing avatar, name and username
- */
 const UserProfile = ({ isCollapsed }: { isCollapsed: boolean }) => (
   <div
     className={clsx(
@@ -87,10 +81,9 @@ const UserProfile = ({ isCollapsed }: { isCollapsed: boolean }) => (
 );
 
 // ============================================================================
-// NAVIGATION ITEMS DATA
+// NAVIGATION DATA & SECTIONS
 // ============================================================================
 
-/* App Datatables navigation items */
 const GAME_DATA_ITEMS = [
   { icon: Carrot, label: 'Crops', href: '/admin/crops' },
   { icon: Fish, label: 'Fish', href: '/admin/fish' },
@@ -98,15 +91,10 @@ const GAME_DATA_ITEMS = [
   { icon: ChefHat, label: 'Recipes', href: '/admin/recipes' },
 ] as const;
 
-/* Users navigation items */
 const USER_ITEMS = [
   { icon: IconUser, label: 'All Users', url: '/admin/users' },
   { icon: IconUserBolt, label: 'Admins', url: '/admin/admins' },
 ] as const;
-
-// ============================================================================
-// NAVIGATION SECTION COMPONENTS
-// ============================================================================
 
 const DashboardHomeSection = ({ isCollapsed }: { isCollapsed: boolean }) => (
   <div className="mt-3">
@@ -123,10 +111,8 @@ const DashboardHomeSection = ({ isCollapsed }: { isCollapsed: boolean }) => (
   </div>
 );
 
-/* App Datatables section with all data-related navigation items */
 const GameDataSection = ({ isCollapsed }: { isCollapsed: boolean }) => (
   <div className="mt-3">
-    {/* Section Header with border divider */}
     <div className="relative">
       {!isCollapsed ? (
         <div className="flex gap-1 text-zinc-500/60 mb-1 text-sm items-center pl-2">
@@ -137,9 +123,7 @@ const GameDataSection = ({ isCollapsed }: { isCollapsed: boolean }) => (
         <div className="border-t border-zinc-200 my-2" />
       )}
     </div>
-
-    {/* Navigation Items */}
-    <div className={`flex flex-col  ${isCollapsed ? 'gap-4' : 'gap-0.5'}`}>
+    <div className={`flex flex-col ${isCollapsed ? 'gap-4' : 'gap-0.5'}`}>
       {GAME_DATA_ITEMS.map(({ icon: Icon, label, href }) => (
         <Link
           href={href}
@@ -160,10 +144,8 @@ const GameDataSection = ({ isCollapsed }: { isCollapsed: boolean }) => (
   </div>
 );
 
-/* Users section with user management navigation items */
 const UsersSection = ({ isCollapsed }: { isCollapsed: boolean }) => (
   <div className="mt-3">
-    {/* Section Header with border divider */}
     <div className="relative">
       {!isCollapsed ? (
         <div className="flex gap-1 text-zinc-500/60 mb-1 text-sm items-center pl-2">
@@ -174,8 +156,6 @@ const UsersSection = ({ isCollapsed }: { isCollapsed: boolean }) => (
         <div className="border-t border-zinc-200 my-2" />
       )}
     </div>
-
-    {/* Navigation Items */}
     <div className={`flex flex-col ${isCollapsed ? 'gap-4' : 'gap-0.5'}`}>
       {USER_ITEMS.map(({ icon: Icon, label, url }) => (
         <Link
@@ -197,7 +177,6 @@ const UsersSection = ({ isCollapsed }: { isCollapsed: boolean }) => (
   </div>
 );
 
-/* Logout button at the bottom of the sidebar */
 const LogoutButton = ({ isCollapsed }: { isCollapsed: boolean }) => (
   <Link href="/">
     <div
@@ -250,19 +229,11 @@ const SearchBar = ({
       readOnly={isCollapsed}
       onChange={(e) => setSearchValue(e.target.value)}
       className={`w-full relative rounded-md border border-zinc-300 bg-white/60 focus:bg-white focus:shadow-sm mt-3 transition-all outline-none placeholder:text-slate-400 duration-300 text-sm ${isCollapsed ? 'p-3 py-1.5 cursor-pointer hover:bg-white hover:shadow-sm' : 'pr-3 pl-7 py-1.5'}`}
-      onClick={() => {
-        if (isCollapsed) {
-          setIsCollapsed(false);
-        }
-      }}
+      onClick={() => isCollapsed && setIsCollapsed(false)}
     />
     <IconSearch
       className={`absolute ${isCollapsed ? 'left-5.5 top-4.5 w-5 h-5 cursor-pointer' : 'left-2 top-5.5 w-3.5 h-3.5 text-slate-400'}`}
-      onClick={() => {
-        if (isCollapsed) {
-          setIsCollapsed(false);
-        }
-      }}
+      onClick={() => isCollapsed && setIsCollapsed(false)}
     />
   </div>
 );
@@ -279,9 +250,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [searchValue, setSearchValue] = useState('');
 
+  // No more async auth checks here!
+  // Middleware handles the redirect before this component even loads.
+
   return (
     <div className="h-dvh w-full bg-mm-blue-lighter flex p-2">
-      {/* Left Side - Navigation (Static across all admin pages) */}
       <nav
         className={clsx(
           'h-full flex gap-3 flex-col transition-all duration-300 relative',
@@ -319,7 +292,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         </div>
       </nav>
 
-      {/* Right Side - Dynamic Page Content */}
       <main className="grow h-full p-3">
         <div className="bg-white border border-zinc-200 h-full rounded-lg shadow-sm px-8 pt-6 pb-10 overflow-auto hide-scrollbar">
           {children}
