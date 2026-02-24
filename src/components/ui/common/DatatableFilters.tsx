@@ -137,7 +137,7 @@ export function DataTableFilters({
   return (
     <div
       className={clsx(
-        'mb-4 w-full grid grid-cols-1 gap-4 border rounded-2xl p-4 border-neutral-200',
+        'mb-4 w-full grid grid-cols-1 gap-5 border rounded-2xl p-4  border-neutral-200',
         gridColsMap[columns],
         className,
       )}
