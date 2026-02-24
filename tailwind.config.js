@@ -33,6 +33,7 @@ module.exports = {
         'mm-orange': {
           mid: '#FFD49D',
           'dark-mid': '#ffb251',
+          dark: '#ff9b1e',
         },
       },
       spacing: {

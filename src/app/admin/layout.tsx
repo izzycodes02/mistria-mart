@@ -304,7 +304,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             <UserProfile isCollapsed={isCollapsed} />
             <SearchBar
               isCollapsed={isCollapsed}
-              setIsCollapsed={setIsCollapsed} 
+              setIsCollapsed={setIsCollapsed}
               searchValue={searchValue}
               setSearchValue={setSearchValue}
             />
@@ -321,7 +321,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
       {/* Right Side - Dynamic Page Content */}
       <main className="grow h-full p-3">
-        <div className="bg-white border border-zinc-200 h-full rounded-lg shadow-sm pb-2 px-8 pt-5 overflow-auto">
+        <div className="bg-white border border-zinc-200 h-full rounded-lg shadow-sm px-8 pt-6 pb-10 overflow-auto hide-scrollbar">
           {children}
         </div>
       </main>

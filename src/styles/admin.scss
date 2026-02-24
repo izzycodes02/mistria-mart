@@ -12,9 +12,23 @@
 
         &:hover {
             @apply shadow-sm bg-slate-50 rounded-md;
+
             svg {
                 @apply text-mm-pink-100;
             }
         }
+    }
+}
+
+.authInput {
+    @apply w-full py-1.5 pr-3 bg-white border border-gray-300 rounded-lg text-sm placeholder:text-gray-400 placeholder:text-sm hover:placeholder:text-gray-400 focus:ring-2  focus:border-white outline-none transition-colors duration-200 ease-in-out shadow-sm;
+}
+
+.icon {
+    @apply absolute inset-y-0 flex items-center transition-colors;
+    @apply text-gray-400 peer-focus:text-mm-pink-75;
+
+    &.left {
+        @apply left-0 pl-3;
     }
 }
