@@ -2,8 +2,8 @@ import { checkUserRole } from '../helpers/rolesHelper';
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
-
 export async function updateSession(request: NextRequest) {
+  console.log('MIDDLEWARE RUNNING FOR PATH:', request.nextUrl.pathname);
   let supabaseResponse = NextResponse.next({
     request,
   });
@@ -39,21 +39,24 @@ export async function updateSession(request: NextRequest) {
   // --- ADMIN PROTECTED ROUTES LOGIC ---
   const isPathAdmin = request.nextUrl.pathname.startsWith('/admin');
 
-  if (isPathAdmin) {
-    // 1. If not logged in at all, kick to login
+  // Don't redirect if already on the login page to avoid redirect loops
+  const isLoginPage = request.nextUrl.pathname === '/login/admin';
+
+  if (isPathAdmin && !isLoginPage) {
+    // 1. If not logged in at all, kick to admin login
     if (!user) {
       const url = request.nextUrl.clone();
-      url.pathname = '/auth/admin-login';
+      url.pathname = '/login/admin';
       return NextResponse.redirect(url);
     }
 
     // 2. Check Role
     const { isAdmin } = await checkUserRole(user.id);
 
-    // 3. If logged in but not an admin, kick to login with error
+    // 3. If logged in but not an admin, kick to admin login with error
     if (!isAdmin) {
       const url = request.nextUrl.clone();
-      url.pathname = '/auth/admin-login';
+      url.pathname = '/login/admin';
       url.searchParams.set('error', 'unauthorized');
       return NextResponse.redirect(url);
     }

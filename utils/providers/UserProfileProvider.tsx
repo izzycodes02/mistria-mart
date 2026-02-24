@@ -30,6 +30,7 @@ interface UserProfileContextType {
   ) => Promise<{ success: boolean; error?: string }>;
   isAdmin: boolean;
   isSuperAdmin: boolean;
+  logout: () => Promise<void>;
 }
 
 const UserProfileContext = createContext<UserProfileContextType | undefined>(
@@ -148,6 +149,12 @@ export function UserProfileProvider({
     };
   }, [fetchProfile, supabase]); // All dependencies now included
 
+  // Logout function
+  const logout = useCallback(async () => {
+    await supabase.auth.signOut();
+    setProfile(null); // Clear the state immediately
+  }, [supabase]);
+
   const isAdmin = profile?.role === 'admin' || profile?.role === 'super-admin';
   const isSuperAdmin = profile?.role === 'super-admin';
 
@@ -161,6 +168,7 @@ export function UserProfileProvider({
         updateProfile,
         isAdmin,
         isSuperAdmin,
+        logout,
       }}
     >
       {children}

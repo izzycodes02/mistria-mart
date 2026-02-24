@@ -178,9 +178,7 @@ export default function AdminLogin() {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    setAuthError(null);
 
-    // Basic Validation
     if (!email || !password) {
       setError('Please fill in all fields.');
       setLoading(false);
@@ -188,82 +186,48 @@ export default function AdminLogin() {
     }
 
     try {
-      // Initialize Supabase client
       const supabase = createClient();
 
-      // Step 1: Check if user has admin role BEFORE attempting login
-      // This saves an unnecessary auth attempt if they're not an admin
-      const userRole = await getUserRoleByEmail(email);
+      // STEP 1: Attempt Login First
+      // This establishes the session so RLS will now let us read the profile
+      const { data: authData, error: authError } =
+        await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
 
-      // If user doesn't exist or isn't an admin, show error
-      if (!userRole) {
-        setError('No account found with this email.');
-        setLoading(false);
-        return;
-      }
-
-      if (userRole !== 'admin' && userRole !== 'super-admin') {
-        setError('Access denied. This area is for administrators only.');
-        setLoading(false);
-        return;
-      }
-
-      // Step 2: Attempt to sign in (now we know they're an admin)
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) {
-        // Handle specific auth errors
-        if (error.message.includes('Invalid login credentials')) {
-          setError('Invalid email or password.');
-        } else {
-          setError(error.message);
+      if (authError) {
+        if (authError.message.includes('Invalid login credentials')) {
+          throw new Error('Invalid email or password.');
         }
-        throw error;
+        throw authError;
       }
 
-      // Step 3: Double-check the role after login (extra security)
+      // STEP 2: Now that we are authed, check the role using the UID
+      // Use the ID, not the email, for better performance/security
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
         .select('role')
-        .eq('id', data.user.id)
+        .eq('id', authData.user.id)
         .single();
 
       if (profileError || !profile) {
-        console.error('Error fetching profile after login:', profileError);
-        // Still log them out for security
         await supabase.auth.signOut();
-        setError('Account configuration error. Please contact support.');
-        setLoading(false);
-        return;
+        throw new Error('Account configuration error. Please contact support.');
       }
 
-      const finalRole = profile.role as UserRole;
+      const role = profile.role as UserRole;
 
-      // Final role verification
-      if (finalRole !== 'admin' && finalRole !== 'super-admin') {
-        // User's role was changed after login check? Sign them out
+      // STEP 3: Verify Admin Status
+      if (role !== 'admin' && role !== 'super-admin') {
+        // Not an admin? Kick them out immediately
         await supabase.auth.signOut();
-        setError(
-          'Your account no longer has admin access. Please contact support.',
-        );
-        setLoading(false);
-        return;
+        throw new Error('Access denied. This area is for administrators only.');
       }
 
-      // Log admin login for audit purposes (optional)
-      console.log(
-        `Admin login successful: ${email} (${finalRole}) at ${new Date().toISOString()}`,
-      );
-
-      // Redirect based on role (maybe different dashboards for admin vs super-admin)
-      if (finalRole === 'super-admin' || finalRole === 'admin') {
-        router.push('/admin');
-      }
-
-      router.refresh(); // Refresh to update server components
+      // Success! Redirect
+      router.push('/admin');
+      router.refresh();
     } catch (err) {
       // Defaults to 'unknown' in modern TS
       // Error already set in specific cases, this is for unexpected errors

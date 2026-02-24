@@ -25,6 +25,8 @@ import {
   useUserProfile,
   type Profile,
 } from 'utils/providers/UserProfileProvider';
+import { createClient } from 'utils/supabase/client';
+import { useRouter } from 'next/navigation';
 
 // --- Types ---
 interface SidebarProps {
@@ -106,6 +108,20 @@ const UserProfile = ({
 export function AdminSidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
   const [searchValue, setSearchValue] = useState('');
   const { profile, isLoading } = useUserProfile();
+  const router = useRouter();
+  const supabase = createClient();
+
+  const handleLogout = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+
+      router.push('/');
+      router.refresh();
+    } catch (err) {
+      console.error('Error logging out:', err);
+    }
+  };
 
   return (
     <nav
@@ -235,7 +251,13 @@ export function AdminSidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
         </div>
 
         <div className="mt-auto pt-4">
-          <Link href="/">
+          <button type="button"
+          className='w-full'
+          onClick={(e) => {
+            e.preventDefault();
+            handleLogout();
+          }}
+          >
             <div
               className={clsx(
                 'leftSideBarItems logOut',
@@ -245,7 +267,7 @@ export function AdminSidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
               <IconLogout className="w-4.5" />
               {!isCollapsed && <p className="font-medium">Log out</p>}
             </div>
-          </Link>
+          </button>
         </div>
       </div>
     </nav>
