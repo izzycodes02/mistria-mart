@@ -22,13 +22,17 @@ import '@/styles/navigation.scss';
 import Link from 'next/link';
 import { useState } from 'react';
 import clsx from 'clsx';
+import {
+  UserProfileProvider,
+  useUserProfile,
+  type Profile,
+} from 'utils/providers/UserProfileProvider';
 
 // ============================================================================
 // CONSTANTS & CONFIG
 // ============================================================================
 
 const DISPLAY_NAME = 'IsabelleZen';
-const USERNAME = 'Username0000';
 const PROFILE_IMAGE_URL =
   'https://i.pinimg.com/1200x/09/82/a0/0982a02c7590f58ba0891a951276d964.jpg';
 
@@ -57,7 +61,14 @@ const Logo = ({ isCollapsed }: { isCollapsed: boolean }) => (
   </Link>
 );
 
-const UserProfile = ({ isCollapsed }: { isCollapsed: boolean }) => (
+// This component now receives profile as a prop
+const UserProfile = ({
+  isCollapsed,
+  profile,
+}: {
+  isCollapsed: boolean;
+  profile: Profile | null;
+}) => (
   <div
     className={clsx(
       'flex w-full p-2 border border-zinc-300 rounded-md items-center shadow-sm bg-white transition-all duration-300',
@@ -74,7 +85,12 @@ const UserProfile = ({ isCollapsed }: { isCollapsed: boolean }) => (
     {!isCollapsed && (
       <div className="flex flex-col">
         <p className="font-semibold">{DISPLAY_NAME}</p>
-        <p className="text-black/50">{USERNAME}</p>
+        <p className="text-black/50 text-sm">@{profile?.username || 'Loading...'}</p>
+        {/* {profile?.role && (
+          <p className="text-xs text-mm-blue-mid font-medium capitalize">
+            {profile.role}
+          </p>
+        )} */}
       </div>
     )}
   </div>
@@ -228,7 +244,7 @@ const SearchBar = ({
       value={isCollapsed ? '' : searchValue}
       readOnly={isCollapsed}
       onChange={(e) => setSearchValue(e.target.value)}
-      className={`w-full relative rounded-md border border-zinc-300 bg-white/60 focus:bg-white focus:shadow-sm mt-3 transition-all outline-none placeholder:text-slate-400 duration-300 text-sm ${isCollapsed ? 'p-3 py-1.5 cursor-pointer hover:bg-white hover:shadow-sm' : 'pr-3 pl-7 py-1.5'}`}
+      className={`w-full relative rounded-md border border-zinc-300 focus:ring-2 focus:ring-mm-blue-mid bg-white focus:shadow-sm mt-3 transition-all outline-none placeholder:text-slate-400 duration-300 text-sm ${isCollapsed ? 'p-3 py-1.5 cursor-pointer hover:bg-white hover:shadow-sm' : 'pr-3 pl-7 py-1.5'}`}
       onClick={() => isCollapsed && setIsCollapsed(false)}
     />
     <IconSearch
@@ -239,19 +255,13 @@ const SearchBar = ({
 );
 
 // ============================================================================
-// LAYOUT COMPONENT
+// MAIN CONTENT COMPONENT (uses the profile hook)
 // ============================================================================
 
-interface AdminLayoutProps {
-  children: React.ReactNode;
-}
-
-export default function AdminLayout({ children }: AdminLayoutProps) {
+function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [searchValue, setSearchValue] = useState('');
-
-  // No more async auth checks here!
-  // Middleware handles the redirect before this component even loads.
+  const { profile, isLoading } = useUserProfile();
 
   return (
     <div className="h-dvh w-full bg-mm-blue-lighter flex p-2">
@@ -274,7 +284,13 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         >
           <div>
             <Logo isCollapsed={isCollapsed} />
-            <UserProfile isCollapsed={isCollapsed} />
+            {isLoading ? (
+              <div className="p-2 border border-zinc-300 rounded-md bg-white animate-pulse">
+                <div className="h-12 w-full bg-gray-200 rounded"></div>
+              </div>
+            ) : (
+              <UserProfile isCollapsed={isCollapsed} profile={profile} />
+            )}
             <SearchBar
               isCollapsed={isCollapsed}
               setIsCollapsed={setIsCollapsed}
@@ -298,5 +314,21 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         </div>
       </main>
     </div>
+  );
+}
+
+// ============================================================================
+// LAYOUT COMPONENT (wraps with provider)
+// ============================================================================
+
+interface AdminLayoutProps {
+  children: React.ReactNode;
+}
+
+export default function AdminLayout({ children }: AdminLayoutProps) {
+  return (
+    <UserProfileProvider>
+      <AdminLayoutContent>{children}</AdminLayoutContent>
+    </UserProfileProvider>
   );
 }

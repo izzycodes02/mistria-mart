@@ -264,10 +264,14 @@ export default function AdminLogin() {
       }
 
       router.refresh(); // Refresh to update server components
-    } catch (err: any) {
+    } catch (err) {
+      // Defaults to 'unknown' in modern TS
       // Error already set in specific cases, this is for unexpected errors
       if (!error) {
-        setError('An unexpected error occurred. Please try again.');
+        // Check if it's a standard Error object to get the message
+        const message =
+          err instanceof Error ? err.message : 'An unexpected error occurred.';
+        setError(message);
       }
       console.error('Admin login error:', err);
     } finally {

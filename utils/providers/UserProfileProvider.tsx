@@ -15,6 +15,7 @@ export type Profile = {
   username: string;
   email: string;
   avatar_url: string | null;
+  display_name: string | null;
   role: 'user' | 'admin' | 'super-admin';
   updated_at: string | null;
 };
@@ -79,6 +80,7 @@ export function UserProfileProvider({
                 user.user_metadata?.username ||
                 user.email?.split('@')[0] ||
                 'user',
+              display_name: user.user_metadata?.display_name || null,
               role: 'user',
               updated_at: new Date().toISOString(),
             })
