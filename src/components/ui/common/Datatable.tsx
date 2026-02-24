@@ -48,10 +48,11 @@ export interface DataTableProps<T> {
   wFull?: boolean;
 
   // Features
-  sortable?: boolean; // Global sortable default
-  actions?: (row: T) => ReactNode; // Actions column content
-  selectable?: boolean; // Enable row selection
-  selectableBgColor?: string; // Background color for selected rows
+  sortable?: boolean;
+  actions?: (row: T) => ReactNode; 
+  selectable?: boolean; 
+  selectableBgColor?: string;
+  onFilterClick?: () => void;
   clickable?: {
     href: string | ((row: T) => string);
     target?: '_blank' | '_self';
@@ -122,6 +123,7 @@ function DataTableInner<T extends Record<string, unknown>>(
     showPagination = true,
     onRowSelect,
     onRowClick,
+    onFilterClick,
   } = props;
 
   // ==========================================================================
@@ -338,7 +340,8 @@ function DataTableInner<T extends Record<string, unknown>>(
           {/* Show the Filters button */}
           <button
             type="button"
-            className="text-sm flex items-center gap-1 bg-mm-orange-mid border-mm-orange-dark-mid hover:bg-mm-orange-dark-mid transition duration-200 ease-in-out px-3 py-2 rounded-lg border shadow-sm active:scale-[.97] font-semibold "
+            className="text-sm flex items-center gap-1 bg-mm-orange-mid border-mm-orange-dark-mid hover:bg-mm-orange-dark-mid transition duration-200 ease-in-out px-3 py-2 rounded-lg border shadow-sm active:scale-[.97] font-semibold"
+            onClick={onFilterClick}
           >
             <IconFilter className="w-4 h-4 " />
             <span>Filters</span>
@@ -381,7 +384,7 @@ function DataTableInner<T extends Record<string, unknown>>(
                       }}
                       className={clsx(
                         index === 0 ? 'pl-5' : 'pl-3',
-                        'py-2 text-sm text-mm-blue-lightest font-bold w-fit',
+                        'py-3 text-sm text-mm-blue-lightest font-bold w-fit',
                         (column.sortable || globalSortable) &&
                           'cursor-pointer  group',
                         column.align === 'left' && 'text-left',

@@ -5,8 +5,6 @@ import {
   IconCheck,
   IconPlus,
   IconX,
-  IconUser,
-  IconCalendar,
   IconSearch
 } from '@tabler/icons-react'
 import { Eye, Pencil, Trash2 } from 'lucide-react';
@@ -36,6 +34,7 @@ interface Crop {
 
 export default function CropsPage() {
   const tableRef = useRef<DataTableRef<Crop>>(null);
+  const [showFilters, setShowFilters] = useState(true); 
 
   // Sample data matching database schema
   const cropsData: Crop[] = [
@@ -481,9 +480,9 @@ export default function CropsPage() {
   // Filters
   const [filters, setFilters] = useState({
     name: '',
-    season: '',
+    season: 'all',
     donatableFilter: '',
-    typeFilter: '',
+    typeFilter: 'all',
   });
 
   const filterConfigs: FilterConfig[] = [
@@ -581,7 +580,7 @@ export default function CropsPage() {
 
       <hr className="border-slate-300 my-5" />
 
-      <DataTableFilters filters={filterConfigs} columns={4} />
+      {showFilters && <DataTableFilters filters={filterConfigs} columns={4} />}
 
       <DataTable
         ref={tableRef}
@@ -590,7 +589,7 @@ export default function CropsPage() {
         wFull
         sortable={false}
         actions={renderActions}
-        selectable={true}
+        selectable={false}
         selectableBgColor="bg-orange-50"
         stats={stats}
         showStats={true}
@@ -606,6 +605,7 @@ export default function CropsPage() {
         onRowClick={(row) => {
           console.log('Row clicked:', row);
         }}
+        onFilterClick={() => setShowFilters(!showFilters)}
       />
     </div>
   );
