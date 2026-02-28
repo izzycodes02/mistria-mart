@@ -36,6 +36,33 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  console.log(
+    'User in middleware:',
+    user ? 'Authenticated' : 'Not authenticated',
+  );
+  console.log('Path:', request.nextUrl.pathname);
+  console.log('Is auth route:', request.nextUrl.pathname === '/login');
+  console.log('Has user:', !!user);
+
+  // --- PROTECTED ROUTES LOGIC ---
+  const isPathProtected = request.nextUrl.pathname.startsWith('/home');
+
+  const isAuthRoute =
+    request.nextUrl.pathname === '/login' ||
+    request.nextUrl.pathname === '/signup';
+
+  // Redirect to login if accessing protected route without user
+  if (isPathProtected && !user) {
+    const url = new URL('/login', request.url);
+    return NextResponse.redirect(url);
+  }
+
+  // Redirect to home if accessing auth routes with user
+  if (isAuthRoute && user) {
+    const url = new URL('/home', request.url);
+    return NextResponse.redirect(url);
+  }
+
   // --- ADMIN PROTECTED ROUTES LOGIC ---
   const isPathAdmin = request.nextUrl.pathname.startsWith('/admin');
 

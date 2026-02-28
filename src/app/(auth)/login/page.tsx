@@ -180,8 +180,6 @@ export default function Login() {
   const hasEmailError = emailError !== null;
   const hasAuthError = authError !== null;
 
-
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
@@ -209,10 +207,14 @@ export default function Login() {
       }
 
       // Successful login - redirect to dashboard or home
-      router.push('/dashboard');
-      router.refresh(); // Refresh to update server components
-    } catch (err: any) {
-      setError(err.message || 'Invalid credentials. Please try again.');
+      router.push('/home');
+      router.refresh(); 
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('An unexpected error occurred');
+      }
     } finally {
       setLoading(false);
     }

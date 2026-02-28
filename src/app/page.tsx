@@ -8,6 +8,11 @@ export default function Home() {
       <h2 className="font-bold text-lg my-2">Fake Navigation (for now):</h2>
       <ul className="list-disc ml-8">
         <li>
+          <Link href="/home" className="text-neutral-600 hover:text-neutral-400 hover:underline">
+            Home Page
+          </Link>
+        </li>
+        <li>
           <Link
             href="/login"
             className="text-blue-600 hover:text-blue-400 hover:underline"
